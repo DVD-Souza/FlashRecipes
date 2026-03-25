@@ -24,7 +24,8 @@ Pessoas que cozinham em casa, seja para subsistência ou por lazer, e que deseja
 - **Flutter** – Framework para desenvolvimento mobile híbrido.  
 - **TheMealDB API** – API especializada em receitas.  
 - **SQLite** – Banco de dados local.  
-- **Google Translator (Dart)** – Tradução de receitas.  
+- **Google Translator (Dart)** – Tradução de receitas.
+- **Inteligencia Artificial(Copilot)** - Usada como apoio na estrutura do projeto.
 
 ## Execução
 
