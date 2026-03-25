@@ -20,11 +20,11 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   }
 
-  runApp(const AppReceitas());
+  runApp(const FlashReceitas());
 }
 
-class AppReceitas extends StatelessWidget {
-  const AppReceitas({super.key});
+class FlashReceitas extends StatelessWidget {
+  const FlashReceitas({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class AppReceitas extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'App de Receitas',
+        title: 'Flash Receitas',
 
         // 🎨 TEMA GLOBAL
         theme: ThemeData(
