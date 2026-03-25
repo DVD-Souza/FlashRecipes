@@ -199,6 +199,10 @@ class ReceitasControlador extends ChangeNotifier {
     });
   }
 
+  Future<String> traduzirTextoSimples(String texto, {String from = 'en', String to = 'pt'}) async {
+    return await _tradutor.traduzirSimples(texto, from: from, to: to);
+  }
+
   @override
   void dispose() {
     _debounce?.cancel();

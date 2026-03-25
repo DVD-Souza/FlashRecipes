@@ -25,10 +25,21 @@ class _PaginaReceitasDaCategoriaState
   bool carregando = true;
   List receitasApi = [];
 
+  String nomeCategoriaExibicao = "";
+
   @override
   void initState() {
     super.initState();
     carregarReceitas();
+    traduzirCategoria();
+  }
+   
+  Future<void> traduzirCategoria() async {
+    final controlador = context.read<ReceitasControlador>();
+    final categoriaPt = await controlador.traduzirTextoSimples(widget.categoriaNome);
+
+    if (!context.mounted) return;
+    setState(() => nomeCategoriaExibicao = categoriaPt);
   }
 
   Future<void> carregarReceitas() async {
@@ -41,6 +52,12 @@ class _PaginaReceitasDaCategoriaState
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body);
       receitasApi = json["meals"];
+    }
+
+    final controlador = context.read<ReceitasControlador>();
+    for (final item in receitasApi) {
+      final receita = converter(item);
+      controlador.traduzirSeNecessario(receita);
     }
 
     setState(() => carregando = false);
@@ -64,7 +81,9 @@ class _PaginaReceitasDaCategoriaState
       backgroundColor: const Color(0xFFFFF5EC),
 
       appBar: AppBar(
-        title: Text(widget.categoriaNome),
+        title: Text(nomeCategoriaExibicao.isNotEmpty 
+            ? nomeCategoriaExibicao 
+            : widget.categoriaNome),
       ),
 
       body: carregando
