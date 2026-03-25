@@ -76,9 +76,9 @@ class _SplashScreenState extends State<SplashScreen>
                 const SizedBox(height: 26),
 
                 const Text(
-                  "AppReceitas",
+                  "Flash Receitas",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFFE65100),
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
