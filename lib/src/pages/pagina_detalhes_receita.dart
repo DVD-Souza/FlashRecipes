@@ -19,8 +19,7 @@ class PaginaDetalhesReceita extends StatefulWidget {
       _PaginaDetalhesReceitaState();
 }
 
-class _PaginaDetalhesReceitaState
-    extends State<PaginaDetalhesReceita> {
+class _PaginaDetalhesReceitaState extends State<PaginaDetalhesReceita> {
 
   late Future<ReceitaTraduzida> _future;
 
@@ -150,11 +149,13 @@ class _PaginaDetalhesReceitaState
 
       // 🔥 BOTÕES FLUTUANTES (UI NOVA)
       floatingActionButtonLocation:
-          FloatingActionButtonLocation.startTop,
+          FloatingActionButtonLocation.centerTop,
 
-      floatingActionButton: Row(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 10),
 
           // 🔙 VOLTAR
           FloatingActionButton(
@@ -164,8 +165,6 @@ class _PaginaDetalhesReceitaState
             backgroundColor: Colors.white,
             child: const Icon(Icons.arrow_back, color: Colors.black),
           ),
-
-          const Spacer(),
 
           // ❤️ FAVORITO
           FloatingActionButton(
@@ -186,10 +185,9 @@ class _PaginaDetalhesReceitaState
               color: Colors.red,
             ),
           ),
-
-          const SizedBox(width: 10),
         ],
       ),
+    )
     );
   }
 }
