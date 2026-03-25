@@ -1,16 +1,39 @@
-# appreceitas
+# Flash Receitas v1.0
 
-A new Flutter project.
+O **Flash Receitas** é uma aplicação desenvolvida para o desafio proposto pelo orientador **Ícaro Vasconcelos** na disciplina de Desenvolvimento Mobile Híbrido.  
+Ela visa facilitar o acesso, organização e planejamento de receitas para pessoas que cozinham em casa, seja por necessidade ou hobby.
 
-## Getting Started
+## Integrantes
 
-This project is a starting point for a Flutter application.
+- André Almeida Gomes Neto
+- Deivid Souza dos Santos Oliveira
+- Ismael Rodrigues de Oliveira Neto
+- João Vitor da Conceição de Almeida
 
-A few resources to get you started if this is your first Flutter project:
+## Problema Alvo
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Muitas pessoas enfrentam dificuldades ao cozinhar ou planejar refeições, seja por falta de tempo, organização ou acesso rápido a receitas. O **Flash Receitas** busca resolver esses problemas centralizando receitas, permitindo buscas rápidas e facilitando o planejamento de refeições.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Público-Alvo
+
+Pessoas que cozinham em casa, seja para subsistência ou por lazer, e que desejam organizar suas receitas de forma prática e eficiente.
+
+## Tecnologias Utilizadas
+
+- **Dart** – Linguagem de programação principal.  
+- **Flutter** – Framework para desenvolvimento mobile híbrido.  
+- **TheMealDB API** – API especializada em receitas.  
+- **SQLite** – Banco de dados local.  
+- **Google Translator (Dart)** – Tradução de receitas.  
+
+## Execução
+
+Para executar a aplicação:
+
+1. Clone ou baixe o repositório, navegue até a pasta raiz e execute o comando run:  
+   ```bash
+   git clone https://github.com/DVD-Souza/FlashRecipes.git
+   cd flash_receitas
+   flutter run
+   ```
+2. Selecione o sistema operacional e divirta-se.   
