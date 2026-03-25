@@ -63,7 +63,7 @@ class PaginaInicio extends StatelessWidget {
                 ],
               ),
               child: TextField(
-                onChanged: controlador.buscarReceitas,
+                onChanged: controlador.buscarReceitasComDebounce,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.search, color: Color(0xFFE65100)),
                   hintText: "Buscar receitas...",

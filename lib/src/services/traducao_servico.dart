@@ -114,16 +114,12 @@ class TraducaoServico {
     return _reconstruir(mapaOriginal, traduzidos);
   }
 
-  Future<String> traduzirSimples(String texto) async {
-  try {
-    final result = await _translator.translate(
-      texto,
-      from: 'en',
-      to: 'pt',
-    );
-    return result.text;
-  } catch (_) {
-    return texto;
+    Future<String> traduzirSimples(String texto, {String from = 'en', String to = 'pt'}) async {
+    try {
+      final result = await _translator.translate(texto, from: from, to: to);
+      return result.text;
+    } catch (_) {
+      return texto;
+    }
   }
-}
 }
