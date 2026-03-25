@@ -1,0 +1,30 @@
+name: appreceitas
+description: Aplicativo de receitas com SQLite + Tradução LibreTranslate
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+
+  # Gerenciamento de estado
+  provider: ^6.0.5
+
+  # HTTP para API de receitas e tradução
+  http: ^1.1.0
+
+  # SQLite no Android e Windows (via FFI)
+  sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.0
+
+  path: ^1.8.3
+  translator: 1.0.4+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
