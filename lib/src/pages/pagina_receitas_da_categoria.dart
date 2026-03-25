@@ -101,11 +101,18 @@ class _CardReceita extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        final controller = context.read<ReceitasControlador>();
+
+        final receitaCompleta =
+            await controller.buscarReceitaPorId(receita.id);
+
+        if (!context.mounted) return; // 🔥 CORREÇÃO
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => PaginaDetalhesReceita(receita: receita),
+            builder: (_) => PaginaDetalhesReceita(receita: receitaCompleta),
           ),
         );
       },
@@ -116,7 +123,7 @@ class _CardReceita extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),

@@ -6,6 +6,7 @@ import '../services/api_receitas_servico.dart';
 import '../services/traducao_servico.dart';
 import '../services/banco_dados_servico.dart';
 
+
 class ReceitasControlador extends ChangeNotifier {
   final ApiReceitasServico _api = ApiReceitasServico();
   final TraducaoServico _tradutor = TraducaoServico();
@@ -29,9 +30,9 @@ class ReceitasControlador extends ChangeNotifier {
 
     carregando = false;
     notifyListeners();
+
   }
 
-  // Busca local em memória
   void buscarReceitas(String termo) {
     if (termo.isEmpty) {
       _receitasFiltradas = [..._todasReceitas];
@@ -45,20 +46,24 @@ class ReceitasControlador extends ChangeNotifier {
   }
 
   Future<ReceitaTraduzida> traduzirReceita(Receita receita) async {
-    // 1. Cache em memória (ULTRA rápido)
-    if (_cacheMemoria.containsKey(receita.id)) {
-      return _cacheMemoria[receita.id]!;
+    final cache = _cacheMemoria[receita.id];
+
+    if (cache != null && cache.instrucoesPt.isNotEmpty) {
+      return cache;
     }
 
-    // 2. Cache SQLite
     final existente = await _banco.buscarTraducao(receita.id);
 
-    if (existente != null) {
+    if (existente != null && existente.instrucoesPt.isNotEmpty) {
       _cacheMemoria[receita.id] = existente;
       return existente;
     }
 
-    // 3. Tradução
+    if (existente != null && existente.instrucoesPt.isEmpty) {
+      // 🔥 precisa atualizar tradução completa
+      debugPrint("Atualizando tradução incompleta...");
+    } 
+
     final nomePt = await _tradutor.traduzirSimples(receita.nome);
     final categoriaPt = await _tradutor.traduzirSimples(receita.categoria);
     final instrucoesPt = await _tradutor.traduzirTexto(receita.instrucoes);
@@ -70,7 +75,6 @@ class ReceitasControlador extends ChangeNotifier {
       instrucoesPt: instrucoesPt,
     );
 
-    // salvar
     await _banco.salvarTraducao(traducao);
     _cacheMemoria[receita.id] = traducao;
 
@@ -78,47 +82,60 @@ class ReceitasControlador extends ChangeNotifier {
   }
 
   Future<void> _traduzirResumo(Receita receita) async {
-    if (_cacheMemoria.containsKey(receita.id)) return;
+  final existente = await _banco.buscarTraducao(receita.id);
 
-    final existente = await _banco.buscarTraducao(receita.id);
-    if (existente != null) {
-      _cacheMemoria[receita.id] = existente;
-      notifyListeners();
-      return;
-    }
+  if (existente != null) return;
 
+  try {
     final nomePt = await _tradutor.traduzirSimples(receita.nome);
     final categoriaPt = await _tradutor.traduzirSimples(receita.categoria);
 
-    final parcial = ReceitaTraduzida(
+    final receitaTraduzida = ReceitaTraduzida(
       idReceita: receita.id,
       nomePt: nomePt,
-      categoriaPt: categoriaPt,
-      instrucoesPt: "", // vazio por enquanto
+      categoriaPt: categoriaPt, // ✅ agora traduzido
+      instrucoesPt: "",
     );
 
-    _cacheMemoria[receita.id] = parcial;
-    notifyListeners();
+   if (!_cacheMemoria.containsKey(receita.id)) {
+      _cacheMemoria[receita.id] = receitaTraduzida;
+    }
+
+  } catch (e) {
+    debugPrint("Erro ao traduzir: $e");
+  }
   }
 
   ReceitaTraduzida? getTraducao(String id) {
     return _cacheMemoria[id];
   }
 
-  Future<void> traduzirResumoReceita(Receita receita) async {
+  final Set<String> _traduzindo = {};
+
+  void traduzirSeNecessario(Receita receita) {
     if (_cacheMemoria.containsKey(receita.id)) return;
+    if (_traduzindo.contains(receita.id)) return;
 
-    final nomePt = await _tradutor.traduzirSimples(receita.nome);
-    final categoriaPt = await _tradutor.traduzirSimples(receita.categoria);
+    _traduzindo.add(receita.id);
 
-    final parcial = ReceitaTraduzida(
-      idReceita: receita.id,
-      nomePt: nomePt,
-      categoriaPt: categoriaPt,
-      instrucoesPt: "",
-    );
+    _traduzirResumo(receita).then((_) async {
+    try {
+        final traduzida = await _banco.buscarTraducao(receita.id);
 
-    _cacheMemoria[receita.id] = parcial;
-    notifyListeners();
+        if (traduzida != null && traduzida.instrucoesPt.isNotEmpty) {
+          _cacheMemoria[receita.id] = traduzida;
+        }
+
+        _traduzindo.remove(receita.id);
+        notifyListeners(); // 🔥 atualiza UI automaticamente
+      } catch (_) {}
+
+      _traduzindo.remove(receita.id);
+      notifyListeners();
+    });    
+  }
+
+  Future<Receita> buscarReceitaPorId(String id) async {
+    return await _api.buscarReceitaPorId(id);
   }
 }

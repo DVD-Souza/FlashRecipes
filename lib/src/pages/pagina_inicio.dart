@@ -56,7 +56,7 @@ class PaginaInicio extends StatelessWidget {
                 borderRadius: BorderRadius.circular(26),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 6,
                     offset: const Offset(0, 3),
                   ),
@@ -108,15 +108,33 @@ class _CardReceita extends StatelessWidget {
 
     // 🔥 TRADUÇÃO
     final traduzida = controlador.getTraducao(receita.id);
+
+    if (traduzida == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          controlador.traduzirSeNecessario(receita);
+        }
+      });
+    }
+
     final nome = traduzida?.nomePt ?? receita.nome;
     final categoria = traduzida?.categoriaPt ?? receita.categoria;
 
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        final controller = context.read<ReceitasControlador>();
+
+        final receitaCompleta =
+            await controller.buscarReceitaPorId(receita.id);
+
+        if (!context.mounted) return;
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => PaginaDetalhesReceita(receita: receita),
+            builder: (_) => PaginaDetalhesReceita(
+              receita: receitaCompleta,
+            ),
           ),
         );
       },
@@ -127,7 +145,7 @@ class _CardReceita extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),
@@ -185,7 +203,7 @@ class _CardReceita extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  // ✅ NOME TRADUZIDO
+                  // ✅ NOME
                   Text(
                     nome,
                     style: const TextStyle(
@@ -196,7 +214,7 @@ class _CardReceita extends StatelessWidget {
 
                   const SizedBox(height: 6),
 
-                  // ✅ CATEGORIA TRADUZIDA
+                  // ✅ CATEGORIA
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 6),

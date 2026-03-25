@@ -158,6 +158,7 @@ class _PaginaDetalhesReceitaState
 
           // 🔙 VOLTAR
           FloatingActionButton(
+            heroTag: "fab_1",
             mini: true,
             onPressed: () => Navigator.pop(context),
             backgroundColor: Colors.white,
@@ -168,6 +169,7 @@ class _PaginaDetalhesReceitaState
 
           // ❤️ FAVORITO
           FloatingActionButton(
+            heroTag: "fab_2",
             mini: true,
             onPressed: () {
               if (estaFav) {

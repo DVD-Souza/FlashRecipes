@@ -18,4 +18,19 @@ class ApiReceitasServico {
 
     return lista.map((e) => Receita.fromJson(e)).toList();
   }
+
+  Future<Receita> buscarReceitaPorId(String id) async {
+    final url = Uri.parse(
+      "https://www.themealdb.com/api/json/v1/1/lookup.php?i=$id",
+    );
+
+    final resp = await http.get(url);
+
+    if (resp.statusCode != 200) {
+      throw Exception("Erro ao buscar receita!");
+    }
+
+    final json = jsonDecode(resp.body);
+    return Receita.fromJson(json["meals"][0]);
+  }
 }

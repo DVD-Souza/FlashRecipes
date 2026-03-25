@@ -26,7 +26,7 @@ class _PaginaBaseState extends State<PaginaBase> {
       body: paginas[indice],
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.white,
-        indicatorColor: const Color(0xFFE65100).withOpacity(0.15),
+        indicatorColor: const Color(0xFFE65100).withValues(alpha: 0.15),
         selectedIndex: indice,
         onDestinationSelected: (i) {
           setState(() {

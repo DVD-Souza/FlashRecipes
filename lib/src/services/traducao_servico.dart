@@ -83,14 +83,13 @@ class TraducaoServico {
   // ================================================================
   // RECONSTRUÇÃO (mantida)
   // ================================================================
-
   String _reconstruir(Map<int, String> original, List<String> traduzido) {
     List<String> linhasFinais = [];
     int index = 0;
 
     original.forEach((linha, conteudoOriginal) {
       if (index < traduzido.length) {
-        linhasFinais.add("$linha. ${traduzido[index]}");
+        linhasFinais.add(traduzido[index]); // ❌ remove numeração
         index++;
       }
     });
